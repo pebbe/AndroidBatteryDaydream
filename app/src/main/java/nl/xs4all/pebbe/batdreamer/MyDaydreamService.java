@@ -20,12 +20,13 @@ public class MyDaydreamService extends DreamService {
 
     private static Random rnd = new Random();
     private float density;
-    private Intent batteryStatus;
     private TimerTask timerTask;
     private ConstraintLayout layout;
     private int imageID;
     private Bitmap bitmap;
     private Canvas canvas;
+    private Context context;
+    private IntentFilter ifilter;
 
     private class TimerTask extends AsyncTask<Integer, Integer, Integer> {
         protected Integer doInBackground(Integer... dummy) {
@@ -80,9 +81,8 @@ public class MyDaydreamService extends DreamService {
         canvas.translate(size, size);
         image.setImageBitmap(bitmap);
 
-        Context context = getApplicationContext();
-        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        batteryStatus = context.registerReceiver(null, ifilter);
+        context = getApplicationContext();
+        ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 
         paint();
     }
@@ -117,6 +117,7 @@ public class MyDaydreamService extends DreamService {
         c.setVerticalBias(imageID, yp);
         c.applyTo(layout);
 
+        Intent batteryStatus = context.registerReceiver(null, ifilter);
         float battery = 0;
         try {
             int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
