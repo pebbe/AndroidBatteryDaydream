@@ -1,0 +1,9 @@
+app/src/main/res/mipmap-*
+app/src/main/res/values-w820dp
+.gradle
+.idea
+*.iml
+app/src/androidTest
+app/src/test
+build
+local.properties
