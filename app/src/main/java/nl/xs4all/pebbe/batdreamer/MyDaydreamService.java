@@ -23,7 +23,6 @@ public class MyDaydreamService extends DreamService {
     private TimerTask timerTask;
     private ConstraintLayout layout;
     private int imageID;
-    private Bitmap bitmap;
     private Canvas canvas;
     private Context context;
     private IntentFilter ifilter;
@@ -76,7 +75,7 @@ public class MyDaydreamService extends DreamService {
         ImageView image = (ImageView) findViewById(imageID);
 
         float size = 92 * density;
-        bitmap = Bitmap.createBitmap((int)(2 * size +.5), (int)(2 * size + .5), Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap((int)(2 * size +.5), (int)(2 * size + .5), Bitmap.Config.ARGB_8888);
         canvas = new Canvas(bitmap);
         canvas.translate(size, size);
         image.setImageBitmap(bitmap);
