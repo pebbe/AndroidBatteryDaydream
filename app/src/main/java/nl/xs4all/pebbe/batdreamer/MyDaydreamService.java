@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
 import android.service.dreams.DreamService;
@@ -27,6 +28,7 @@ public class MyDaydreamService extends DreamService {
     private Canvas canvas;
     private Context context;
     private IntentFilter ifilter;
+    private boolean hasSounded;
 
     private class TimerTask extends AsyncTask<Integer, Integer, Integer> {
         protected Integer doInBackground(Integer... dummy) {
@@ -83,6 +85,8 @@ public class MyDaydreamService extends DreamService {
 
         context = getApplicationContext();
         ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+
+        hasSounded = false;
     }
 
     @Override
@@ -121,12 +125,20 @@ public class MyDaydreamService extends DreamService {
 
         Intent batteryStatus = context.registerReceiver(null, ifilter);
         float battery = .01f;
+        boolean full = false;
         try {
             int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, 1);
             int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
             battery = level / (float) scale;
+            full = (level == scale);
         } catch (Exception e) {
             // ignore
+        }
+
+        if (full && !hasSounded) {
+            MediaPlayer m = MediaPlayer.create(this, R.raw.cling);
+            m.start();
+            hasSounded = true;
         }
 
         Calendar now = Calendar.getInstance();
@@ -147,7 +159,7 @@ public class MyDaydreamService extends DreamService {
         float a3 = 52 * density;
 
         Paint p = new Paint();
-        p.setARGB(255, 128, 0, 0);
+        p.setARGB(255, 102, 0, 38);
         p.setStyle(Paint.Style.STROKE);
         p.setStrokeWidth(lwd);
 
