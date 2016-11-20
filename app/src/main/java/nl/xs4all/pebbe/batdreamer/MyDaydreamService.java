@@ -86,7 +86,7 @@ public class MyDaydreamService extends DreamService {
         context = getApplicationContext();
         ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
 
-        hasSounded = false;
+        hasSounded = true;
     }
 
     @Override
@@ -131,6 +131,9 @@ public class MyDaydreamService extends DreamService {
             int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, 100);
             battery = level / (float) scale;
             full = (level == scale);
+            if (!full) {
+                hasSounded = false;
+            }
         } catch (Exception e) {
             // ignore
         }
