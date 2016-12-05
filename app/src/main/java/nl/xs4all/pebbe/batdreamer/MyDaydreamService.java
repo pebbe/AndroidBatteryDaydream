@@ -6,6 +6,8 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.BatteryManager;
@@ -138,12 +140,6 @@ public class MyDaydreamService extends DreamService {
             // ignore
         }
 
-        if (full && !hasSounded) {
-            MediaPlayer m = MediaPlayer.create(this, R.raw.cling);
-            m.start();
-            hasSounded = true;
-        }
-
         Calendar now = Calendar.getInstance();
         int hour = now.get(Calendar.HOUR);
         if (hour == 0) {
@@ -151,6 +147,25 @@ public class MyDaydreamService extends DreamService {
         }
         int minute = now.get(Calendar.MINUTE);
         String time = String.format("%d:%02d", hour, minute);
+
+        // beep als vol, en nog niet eerder gebeept
+
+        if (full && !hasSounded) {
+            AudioAttributes attr = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .build();
+            AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            int id = am.generateAudioSessionId();
+            MediaPlayer m = MediaPlayer.create(this, R.raw.cling, attr, id);
+            m.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.release();
+                }
+            });
+            m.start();
+            hasSounded = true;
+        }
 
         // tekenen
 
@@ -181,5 +196,6 @@ public class MyDaydreamService extends DreamService {
         // maak veranderingen zichtbaar
 
         image.invalidate();
+
     }
 }
