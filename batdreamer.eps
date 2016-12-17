@@ -1,0 +1,42 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%BoundingBox: 214 314 386 486
+
+64 dict begin
+
+/battery 0.8 def
+/lwd 10 def
+/a0 80 4 add def
+/a1 80 lwd 2 div sub def
+/a2 66 lwd 2 div sub def
+/a3 52 lwd 2 div sub def
+
+300 400 translate
+
+-300 -400 600 800 rectfill
+
+1 1 1 setrgbcolor
+a0 0 moveto
+0 0 a0 0 360 arc
+closepath fill
+
+
+
+102 255 div
+0
+38 255 div
+setrgbcolor
+
+lwd setlinewidth
+0 a1 moveto
+0 0 a1 90 90 battery 360 mul sub arcn
+0 a2 moveto
+0 0 a2 90 90 battery .5 sub .5 div 360 mul sub arcn
+0 a3 moveto
+0 0 a3 90 90 battery .75 sub .25 div 360 mul sub arcn
+stroke
+
+
+
+end
+showpage
+%%EOF
